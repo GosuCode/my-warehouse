@@ -6,4 +6,5 @@ import com.alember.my_warehouse.model.ProductModel;
 
 public interface ProductRepository extends JpaRepository<ProductModel, String> {
 
+
 }

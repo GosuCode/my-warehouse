@@ -20,12 +20,6 @@ public final class InputRequestValidator {
 		if(category.getDescription() == null || category.getDescription() == "") {
 			throw new CategoryException("Description is Empty or Null");
 		}
-		
-		
 	}
-	
-	
-	
-	
 
 }
