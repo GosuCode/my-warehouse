@@ -1,5 +1,6 @@
 package com.alember.my_warehouse.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -42,11 +43,12 @@ public class ProductModel {
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
+    @JsonBackReference
     private CategoryModel category;
 
     @ManyToOne
-    @JoinColumn(name = "supplier_id", nullable = false)
+    @JoinColumn(name = "supplier_id")
+    @JsonBackReference
     private SupplierModel supplier;
 	
-
 }

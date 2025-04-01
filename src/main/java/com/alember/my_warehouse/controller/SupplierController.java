@@ -10,14 +10,13 @@ import com.alember.my_warehouse.services.impl.SupplierImpl;
 @RestController
 @RequestMapping("/api")
 public class SupplierController {
-	
-	@Autowired
-	SupplierImpl supplierImpl;
 
-	@GetMapping("/hello")
-	public String hello() {
-		return "Hello Alember";
-	}
-	
-	
+  @Autowired
+  SupplierImpl supplierImpl;
+
+  @GetMapping("/hello")
+  public String hello() {
+    return "Hello Alember";
+  }
+
 }

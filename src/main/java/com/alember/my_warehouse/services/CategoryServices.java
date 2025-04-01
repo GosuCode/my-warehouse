@@ -4,6 +4,7 @@ import com.alember.my_warehouse.exception.CategoryException;
 import com.alember.my_warehouse.model.CategoryModel;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CategoryServices {
 	
@@ -13,4 +14,7 @@ public interface CategoryServices {
 
 	CategoryModel updateCategory(String id, CategoryModel category) throws CategoryException;
 
+	Optional<CategoryModel> findById(String id) throws CategoryException;
+
+	void deleteCategory(String id) throws CategoryException;
 }

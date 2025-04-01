@@ -9,12 +9,11 @@ import org.springframework.stereotype.Controller;
 @Getter
 @Setter
 @ToString
-@Controller
 public class ApiResponse {
-	
-	private ApiStatus status;
-	private String description;
-	private int statusCode;
-	private Object data;
+
+  private ApiStatus status;
+  private String description;
+  private int statusCode;
+  private Object data;
 
 }
