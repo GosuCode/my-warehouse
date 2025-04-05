@@ -15,5 +15,4 @@ public class ApiResponse {
   private String description;
   private int statusCode;
   private Object data;
-
 }

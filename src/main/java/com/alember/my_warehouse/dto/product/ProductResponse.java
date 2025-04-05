@@ -1,11 +1,11 @@
-package com.alember.my_warehouse.dto;
+package com.alember.my_warehouse.dto.product;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class ProductRequest {
+public class ProductResponse {
     private String sku;
     private String name;
     private String description;
