@@ -83,4 +83,37 @@ public class ProductController {
     return apiResponse;
   }
 
+  @PutMapping("/{id}")
+  public ApiResponse updateProduct(@PathVariable("id") String id, @RequestBody @Valid ProductRequest productRequest) {
+    ApiResponse apiResponse = new ApiResponse();
+    try {
+      ProductModel updatedProduct = productServices.updateProduct(id, productRequest);
+      ProductResponse response = productMapper.toResponse(updatedProduct);
+
+      apiResponse.setStatus(ApiStatus.SUCCESS);
+      apiResponse.setDescription("Product updated successfully!");
+      apiResponse.setData(response);
+    } catch (ProductNotFoundException | CategoryException e) {
+      apiResponse.setStatus(ApiStatus.ERROR);
+      apiResponse.setStatusCode(404);
+      apiResponse.setDescription(e.getMessage());
+    }
+    return apiResponse;
+  }
+
+  @DeleteMapping("/{id}")
+  public ApiResponse deleteProduct(@PathVariable("id") String id) {
+    ApiResponse apiResponse = new ApiResponse();
+    try {
+      productServices.deleteProduct(id);
+      apiResponse.setStatus(ApiStatus.SUCCESS);
+      apiResponse.setDescription("Product deleted successfully!");
+    } catch (ProductNotFoundException e) {
+      apiResponse.setStatus(ApiStatus.ERROR);
+      apiResponse.setStatusCode(404);
+      apiResponse.setDescription(e.getMessage());
+    }
+    return apiResponse;
+  }
+
 }
