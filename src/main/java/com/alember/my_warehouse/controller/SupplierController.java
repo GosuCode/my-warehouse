@@ -1,10 +1,14 @@
 package com.alember.my_warehouse.controller;
 
 import com.alember.my_warehouse.dto.ApiResponse;
+import com.alember.my_warehouse.dto.supplier.SupplierRequest;
+import com.alember.my_warehouse.dto.supplier.SupplierResponse;
 import com.alember.my_warehouse.enums.ApiStatus;
 import com.alember.my_warehouse.exception.SupplierException;
+import com.alember.my_warehouse.mapper.SupplierMapper;
 import com.alember.my_warehouse.model.SupplierModel;
 import com.alember.my_warehouse.services.SupplierServices;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,24 +23,33 @@ public class SupplierController {
 
   @Autowired
   SupplierServices supplierService;
+
+  @Autowired
+  SupplierMapper supplierMapper;
+
   /**
    * Creates a new supplier.
    * POST /api/suppliers
-   * Note: Assumes a @ControllerAdvice handles SupplierException for error responses.
    */
-  @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE) // Keep consumes!
-  public ApiResponse createSupplier(@RequestBody SupplierModel supplier) throws SupplierException {
+  @PostMapping("/")
+  public ApiResponse createSupplier(@RequestBody @Valid SupplierRequest supplierRequest) throws SupplierException {
     ApiResponse response = new ApiResponse();
 
-    supplier.setId(null);
-    supplier.setSuppliedProducts(null); // Or empty list if appropriate
+    SupplierModel supplierModel = new SupplierModel();
 
-    SupplierModel createdSupplier = supplierService.createSupplier(supplier);
+    supplierModel.setName(supplierRequest.getName());
+    supplierModel.setPhone(supplierRequest.getPhone());
+    supplierModel.setEmail(supplierRequest.getEmail());
+    supplierModel.setAddress(supplierRequest.getAddress());
+
+    SupplierModel saveSupplier = supplierService.createSupplier(supplierModel);
+
+    SupplierResponse supplierResponse = supplierMapper.toResponse(saveSupplier);
 
     response.setStatus(ApiStatus.SUCCESS);
     response.setStatusCode(HttpStatus.CREATED.value());
     response.setDescription("Supplier created successfully.");
-    response.setData(createdSupplier); // Set the saved supplier data
+    response.setData(supplierResponse);
 
     return response;
   }
@@ -50,11 +63,15 @@ public class SupplierController {
     ApiResponse response = new ApiResponse();
     try {
       List<SupplierModel> suppliers = supplierService.getAllSuppliers();
+      List<SupplierResponse> responseList = suppliers.stream()
+              .map(supplierMapper::toResponse)
+              .toList();
+
       response.setStatus(ApiStatus.SUCCESS);
       response.setStatusCode(HttpStatus.OK.value());
       response.setDescription("Suppliers fetched successfully.");
-      response.setData(suppliers);
-      return ResponseEntity.ok(response); // Shortcut for status OK
+      response.setData(responseList);
+      return ResponseEntity.ok(response);
     } catch (Exception e) {
       response.setStatus(ApiStatus.ERROR);
       response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
@@ -72,10 +89,11 @@ public class SupplierController {
     ApiResponse response = new ApiResponse();
     return supplierService.getSupplierById(id)
             .map(supplier -> {
+              SupplierResponse supplierResponse = supplierMapper.toResponse(supplier);
               response.setStatus(ApiStatus.SUCCESS);
               response.setStatusCode(HttpStatus.OK.value());
               response.setDescription("Supplier fetched successfully.");
-              response.setData(supplier);
+              response.setData(supplierResponse);
               return ResponseEntity.ok(response);
             })
             .orElseGet(() -> {
@@ -90,18 +108,25 @@ public class SupplierController {
    * Updates an existing supplier.
    * PUT /api/suppliers/{id}
    */
-  @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<ApiResponse> updateSupplier(@PathVariable String id, @RequestBody SupplierModel supplierDetails) {
+  @PutMapping(value = "/{id}")
+  public ResponseEntity<ApiResponse> updateSupplier(@PathVariable String id, @RequestBody SupplierRequest supplierRequest) {
     ApiResponse response = new ApiResponse();
     try {
-      SupplierModel updatedSupplier = supplierService.updateSupplier(id, supplierDetails);
+      SupplierModel supplierModel = new SupplierModel();
+      supplierModel.setName(supplierRequest.getName());
+      supplierModel.setPhone(supplierRequest.getPhone());
+      supplierModel.setEmail(supplierRequest.getEmail());
+      supplierModel.setAddress(supplierRequest.getAddress());
+
+      SupplierModel updatedSupplier = supplierService.updateSupplier(id, supplierModel);
+      SupplierResponse supplierResponse = supplierMapper.toResponse(updatedSupplier);
+
       response.setStatus(ApiStatus.SUCCESS);
       response.setStatusCode(HttpStatus.OK.value());
       response.setDescription("Supplier updated successfully.");
-      response.setData(updatedSupplier);
+      response.setData(supplierResponse);
       return ResponseEntity.ok(response);
     } catch (SupplierException e) {
-      // Check if the exception message indicates "not found" to return 404, else 400
       HttpStatus status = e.getMessage().toLowerCase().contains("not found") ? HttpStatus.NOT_FOUND : HttpStatus.BAD_REQUEST;
       response.setStatus(ApiStatus.ERROR);
       response.setStatusCode(status.value());
@@ -115,6 +140,7 @@ public class SupplierController {
     }
   }
 
+
   /**
    * Deletes a supplier by ID.
    * DELETE /api/suppliers/{id}
@@ -126,16 +152,15 @@ public class SupplierController {
     try {
       supplierService.deleteSupplier(id);
       response.setStatus(ApiStatus.SUCCESS);
-      response.setStatusCode(HttpStatus.OK.value()); // Or HttpStatus.NO_CONTENT.value() if no body is needed
+      response.setStatusCode(HttpStatus.OK.value());
       response.setDescription("Supplier deleted successfully.");
-      // response.setData(null); // Optional: explicitly set data to null
-      return ResponseEntity.ok(response); // Return 200 OK with confirmation message
-      // Alternatively, for 204 No Content:
-      // return ResponseEntity.noContent().build();
+       response.setData(null);
+      return ResponseEntity.ok(response);
     } catch (SupplierException e) {
       response.setStatus(ApiStatus.ERROR);
-      response.setStatusCode(HttpStatus.NOT_FOUND.value()); // Assume delete failure is usually due to not found
+      response.setStatusCode(HttpStatus.NOT_FOUND.value());
       response.setDescription(e.getMessage());
+      response.setData(null);
       return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     } catch (Exception e) {
       response.setStatus(ApiStatus.ERROR);

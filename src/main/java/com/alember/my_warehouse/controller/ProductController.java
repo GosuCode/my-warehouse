@@ -57,7 +57,7 @@ public class ProductController {
 
     apiResponse.setStatus(ApiStatus.SUCCESS);
     apiResponse.setDescription("Products created successfully!");
-    apiResponse.setData(allProducts);
+    apiResponse.setData(responseList);
     return apiResponse;
   }
 
