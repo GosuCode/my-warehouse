@@ -14,7 +14,7 @@ public interface CategoryServices {
 
 	CategoryModel updateCategory(String id, CategoryModel category) throws CategoryException;
 
-	Optional<CategoryModel> findById(String id) throws CategoryException;
+	Optional<CategoryModel> categoryById(String id) throws CategoryException;
 
 	void deleteCategory(String id) throws CategoryException;
 }

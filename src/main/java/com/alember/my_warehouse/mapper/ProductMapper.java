@@ -9,6 +9,7 @@ public class ProductMapper {
 
     public ProductResponse toResponse(ProductModel model){
         ProductResponse response = new ProductResponse();
+        response.setId(model.getId());
         response.setSku(model.getSku());
         response.setName(model.getName());
         response.setDescription(model.getDescription());

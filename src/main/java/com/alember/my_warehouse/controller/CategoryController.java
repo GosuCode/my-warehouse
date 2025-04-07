@@ -1,15 +1,19 @@
 package com.alember.my_warehouse.controller;
 
+import com.alember.my_warehouse.dto.CategoryRequest;
+import com.alember.my_warehouse.dto.category.CategoryResponse;
 import com.alember.my_warehouse.enums.ApiStatus;
 import com.alember.my_warehouse.exception.CategoryException;
+import com.alember.my_warehouse.mapper.CategoryMapper;
 import com.alember.my_warehouse.services.CategoryServices;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import com.alember.my_warehouse.dto.ApiResponse;
 import com.alember.my_warehouse.model.CategoryModel;
 
+import javax.xml.catalog.CatalogException;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,38 +24,43 @@ public class CategoryController {
   @Autowired
   CategoryServices categoryServices;
 
-  @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE)
-  @ResponseBody
-  public ApiResponse addCategory(@RequestBody CategoryModel categoryModel) {
+  @Autowired
+  CategoryMapper categoryMapper;
+
+  @PostMapping("/")
+  public ApiResponse createCategory(@RequestBody @Valid CategoryRequest categoryRequest) throws Exception {
     ApiResponse apiResponse = new ApiResponse();
-    try {
-      CategoryModel cat = categoryServices.addCategory(categoryModel);
+    CategoryModel categoryModel = new CategoryModel();
+
+    categoryModel.setName(categoryRequest.getName());
+    categoryModel.setDescription(categoryRequest.getDescription());
+
+    CategoryModel savedCategory = categoryServices.addCategory(categoryModel);
+
+    CategoryResponse response = categoryMapper.toResponse(savedCategory);
+
       apiResponse.setStatusCode(200);
       apiResponse.setStatus(ApiStatus.SUCCESS);
       apiResponse.setDescription("Category Added Successfully");
-      apiResponse.setData(cat);
-    } catch (CategoryException e) {
-      apiResponse.setStatusCode(500);
-      apiResponse.setStatus(ApiStatus.ERROR);
-      apiResponse.setDescription(e.getMessage());
-    } catch (Exception e) {
-        throw new RuntimeException(e);
-    }
+      apiResponse.setData(response);
       return apiResponse;
   }
 
-  @GetMapping("/all")
+  @GetMapping("/")
   public ApiResponse getAllCategory() {
     ApiResponse apiResponse = new ApiResponse();
       List<CategoryModel> cat = categoryServices.getAllCategory();
+
+    List<CategoryResponse> responseList = cat.stream().map(categoryMapper::toResponse).toList();
+
       apiResponse.setStatusCode(200);
       apiResponse.setStatus(ApiStatus.SUCCESS);
       apiResponse.setDescription("All category fetched successfully!");
-      apiResponse.setData(cat);
+      apiResponse.setData(responseList);
       return apiResponse;
   }
 
-  @PutMapping("/update/{id}")
+  @PutMapping("/{id}")
   public ApiResponse updateCategory(@PathVariable("id") String id, @RequestBody CategoryModel updatedCategory) {
     ApiResponse apiResponse = new ApiResponse();
     try {
@@ -68,15 +77,21 @@ public class CategoryController {
     return apiResponse;
   }
 
-  @GetMapping("/get/{id}")
+  @GetMapping("/{id}")
   public ApiResponse findCategoryById(@PathVariable("id") String id) {
     ApiResponse apiResponse = new ApiResponse();
     try {
-      Optional<CategoryModel> cat = categoryServices.findById(id);
+      Optional<CategoryModel> categoryModelOptional = categoryServices.categoryById(id);
+
+      // unwrap the optional model
+      CategoryModel categoryModel= categoryModelOptional.orElseThrow(()-> new CatalogException("Category not found!"));
+
+      CategoryResponse response = categoryMapper.toResponse(categoryModel);
+
       apiResponse.setStatusCode(200);
       apiResponse.setStatus(ApiStatus.SUCCESS);
       apiResponse.setDescription("Category updated successfully!");
-      apiResponse.setData(cat);
+      apiResponse.setData(response);
     } catch (CategoryException e) {
       apiResponse.setStatusCode(500);
       apiResponse.setStatus(ApiStatus.ERROR);
@@ -85,7 +100,7 @@ public class CategoryController {
     return apiResponse;
   }
 
-  @DeleteMapping("/delete/{id}")
+  @DeleteMapping("/{id}")
   public ApiResponse deleteCategory(@PathVariable("id") String id) {
     ApiResponse apiResponse = new ApiResponse();
     try {

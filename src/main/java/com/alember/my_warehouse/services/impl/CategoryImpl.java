@@ -52,7 +52,7 @@ public class CategoryImpl implements CategoryServices {
         }
     }
 
-    public Optional<CategoryModel> findById(String id) throws CategoryException {
+    public Optional<CategoryModel> categoryById(String id) throws CategoryException {
         Optional<CategoryModel> cat = categoryRepo.findById(id);
         if (cat.isEmpty()) {
             throw new CategoryException("Category with id " + id + " does not exist");

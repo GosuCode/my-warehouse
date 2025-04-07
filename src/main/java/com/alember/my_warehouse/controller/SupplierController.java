@@ -20,7 +20,7 @@ public class SupplierController {
   @Autowired
   SupplierServices supplierService;
   /**
-   * Creates a new supplier (following ProductController pattern).
+   * Creates a new supplier.
    * POST /api/suppliers
    * Note: Assumes a @ControllerAdvice handles SupplierException for error responses.
    */

@@ -30,6 +30,7 @@ public class ProductController {
   public ApiResponse createProduct(@RequestBody @Valid ProductRequest productRequest) throws CategoryException {
     ApiResponse apiResponse = new ApiResponse();
     ProductModel productModel = new ProductModel();
+
     productModel.setSku(productRequest.getSku());
     productModel.setName(productRequest.getName());
     productModel.setDescription(productRequest.getDescription());
@@ -42,7 +43,7 @@ public class ProductController {
 
     apiResponse.setStatus(ApiStatus.SUCCESS);
     apiResponse.setDescription("Product created successfully!");
-    apiResponse.setData(savedProduct);
+    apiResponse.setData(response);
     return apiResponse;
   }
 
