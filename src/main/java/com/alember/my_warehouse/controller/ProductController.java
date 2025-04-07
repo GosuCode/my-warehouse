@@ -16,6 +16,16 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * ProductController handles CRUD operations for products.
+ *
+ * Endpoints:
+ * - POST /api/product/ - Create a new product.
+ * - GET /api/product/ - Retrieve all products.
+ * - GET /api/product/{id} - Retrieve a product by ID.
+ * - PUT /api/product/{id} - Update an existing product by ID.
+ * - DELETE /api/product/{id} - Delete a product by ID.
+ */
 @RestController
 @RequestMapping("/api/product")
 public class ProductController {
@@ -26,6 +36,12 @@ public class ProductController {
   @Autowired
   private ProductMapper productMapper;
 
+  /**
+   * Creates a new product.
+   * POST /api/product/
+   * @param productRequest The product details.
+   * @return ApiResponse with the status and created product.
+   */
   @PostMapping("/")
   public ApiResponse createProduct(@RequestBody @Valid ProductRequest productRequest) throws CategoryException {
     ApiResponse apiResponse = new ApiResponse();
@@ -47,7 +63,11 @@ public class ProductController {
     return apiResponse;
   }
 
-
+  /**
+   * Retrieves all products.
+   * GET /api/product/
+   * @return ApiResponse with the list of products.
+   */
   @GetMapping("/")
   public ApiResponse getAllProduct(){
     ApiResponse apiResponse = new ApiResponse();
@@ -61,7 +81,12 @@ public class ProductController {
     return apiResponse;
   }
 
-
+  /**
+   * Retrieves a product by its ID.
+   * GET /api/product/{id}
+   * @param id The product ID.
+   * @return ApiResponse with the product details.
+   */
   @GetMapping("/{id}")
   public ApiResponse getSingleProduct(@PathVariable("id") String id){
     ApiResponse apiResponse = new ApiResponse();
@@ -84,6 +109,13 @@ public class ProductController {
     return apiResponse;
   }
 
+  /**
+   * Updates an existing product.
+   * PUT /api/product/{id}
+   * @param id The product ID.
+   * @param productRequest The updated product data.
+   * @return ApiResponse with the status and updated product.
+   */
   @PutMapping("/{id}")
   public ApiResponse updateProduct(@PathVariable("id") String id, @RequestBody @Valid ProductRequest productRequest) {
     ApiResponse apiResponse = new ApiResponse();
@@ -102,6 +134,12 @@ public class ProductController {
     return apiResponse;
   }
 
+  /**
+   * Deletes a product by its ID.
+   * DELETE /api/product/{id}
+   * @param id The product ID.
+   * @return ApiResponse with the deletion status.
+   */
   @DeleteMapping("/{id}")
   public ApiResponse deleteProduct(@PathVariable("id") String id) {
     ApiResponse apiResponse = new ApiResponse();

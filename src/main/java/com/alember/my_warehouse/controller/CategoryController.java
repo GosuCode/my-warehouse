@@ -17,6 +17,16 @@ import javax.xml.catalog.CatalogException;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * CategoryController handles CRUD operations for categories.
+ *
+ * Endpoints:
+ * - POST /api/category/ - Create a new category.
+ * - GET /api/category/ - Retrieve all categories.
+ * - GET /api/category/{id} - Retrieve a category by ID.
+ * - PUT /api/category/{id} - Update an existing category by ID.
+ * - DELETE /api/category/{id} - Delete a category by ID.
+ */
 @RestController
 @RequestMapping("/api/category")
 public class CategoryController {
@@ -27,6 +37,12 @@ public class CategoryController {
   @Autowired
   CategoryMapper categoryMapper;
 
+  /**
+   * Creates a new category.
+   * POST /api/category/
+   * @param categoryRequest The category details.
+   * @return ApiResponse with the status and created category.
+   */
   @PostMapping("/")
   public ApiResponse createCategory(@RequestBody @Valid CategoryRequest categoryRequest) throws Exception {
     ApiResponse apiResponse = new ApiResponse();
@@ -46,6 +62,11 @@ public class CategoryController {
       return apiResponse;
   }
 
+  /**
+   * Retrieves all categories.
+   * GET /api/category/
+   * @return ApiResponse with the list of categories.
+   */
   @GetMapping("/")
   public ApiResponse getAllCategory() {
     ApiResponse apiResponse = new ApiResponse();
@@ -60,6 +81,13 @@ public class CategoryController {
       return apiResponse;
   }
 
+  /**
+   * Updates an existing category.
+   * PUT /api/category/{id}
+   * @param id The category ID.
+   * @param updatedCategory The updated category data.
+   * @return ApiResponse with the status and updated category.
+   */
   @PutMapping("/{id}")
   public ApiResponse updateCategory(@PathVariable("id") String id, @RequestBody CategoryModel updatedCategory) {
     ApiResponse apiResponse = new ApiResponse();
@@ -77,6 +105,12 @@ public class CategoryController {
     return apiResponse;
   }
 
+  /**
+   * Retrieves a category by its ID.
+   * GET /api/category/{id}
+   * @param id The category ID.
+   * @return ApiResponse with the category details.
+   */
   @GetMapping("/{id}")
   public ApiResponse findCategoryById(@PathVariable("id") String id) {
     ApiResponse apiResponse = new ApiResponse();
@@ -100,6 +134,12 @@ public class CategoryController {
     return apiResponse;
   }
 
+  /**
+   * Deletes a category by its ID.
+   * DELETE /api/category/{id}
+   * @param id The category ID.
+   * @return ApiResponse with the deletion status.
+   */
   @DeleteMapping("/{id}")
   public ApiResponse deleteCategory(@PathVariable("id") String id) {
     ApiResponse apiResponse = new ApiResponse();

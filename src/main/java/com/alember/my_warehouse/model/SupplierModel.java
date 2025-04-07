@@ -17,6 +17,23 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Represents a supplier entity in the system.
+ *
+ * This class is mapped to the "supplier" table in the database and contains
+ * details about the supplier, including their name, phone, email, address,
+ * and the products they supply.
+ *
+ * Fields:
+ * - id: Unique identifier for the supplier.
+ * - name: Name of the supplier (non-nullable).
+ * - phone: Phone number of the supplier (non-nullable).
+ * - email: Email address of the supplier (non-nullable).
+ * - address: Address of the supplier (non-nullable).
+ *
+ * Relationships:
+ * - One-to-many relationship with ProductModel (a supplier can provide multiple products).
+ */
 @Entity
 @Getter
 @Setter

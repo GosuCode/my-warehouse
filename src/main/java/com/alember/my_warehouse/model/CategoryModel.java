@@ -14,6 +14,21 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.*;
 
+/**
+ * Represents a category entity in the system.
+ *
+ * This class is mapped to the "category" table in the database and contains
+ * details about the product category, including its name, description, and
+ * the list of products associated with this category.
+ *
+ * Fields:
+ * - id: Unique identifier for the category (auto-generated, hidden for serialization).
+ * - name: Name of the category (non-nullable, unique).
+ * - description: Description of the category (non-nullable, unique).
+ *
+ * Relationships:
+ * - One-to-many relationship with ProductModel (a category can have multiple products).
+ */
 @Entity
 @Data
 @Table(name = "category")

@@ -14,6 +14,16 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * ProductImpl implements ProductServices to handle business logic for products.
+ *
+ * Methods:
+ * - addProduct: Adds a new product, associating it with a category.
+ * - getAllProduct: Retrieves all products.
+ * - getProduct: Retrieves a product by its ID.
+ * - updateProduct: Updates an existing product by ID.
+ * - deleteProduct: Deletes a product by ID.
+ */
 @Service
 public class ProductImpl implements ProductServices {
 
@@ -23,6 +33,13 @@ public class ProductImpl implements ProductServices {
     @Autowired
     CategoryRepository categoryRepository;
 
+    /**
+     * Adds a new product and associates it with a category.
+     * @param product The product to be added.
+     * @param categoryId The ID of the category to associate.
+     * @return The saved product.
+     * @throws CategoryException If the category does not exist.
+     */
     @Override
     public ProductModel addProduct(ProductModel product, String categoryId) throws CategoryException {
         CategoryModel category = categoryRepository.findById(categoryId).orElseThrow(() -> new CategoryException("Category not found"));
@@ -31,17 +48,34 @@ public class ProductImpl implements ProductServices {
         return productRepository.save(product);
     }
 
+    /**
+     * Retrieves all products.
+     * @return List of all products.
+     */
     @Override
     public List<ProductModel> getAllProduct() {
         return productRepository.findAll();
     }
 
+    /**
+     * Retrieves a product by its ID.
+     * @param id The product ID.
+     * @return The product if found.
+     */
     @Override
     public Optional<ProductModel> getProduct(String id) {
         Optional<ProductModel> product = productRepository.findById(id);
         return product;
     }
 
+    /**
+     * Updates an existing product by its ID.
+     * @param id The product ID.
+     * @param request The updated product data.
+     * @return The updated product.
+     * @throws ProductNotFoundException If the product is not found.
+     * @throws CategoryException If the category does not exist.
+     */
     @Override
     public ProductModel updateProduct(String id, ProductRequest request)
             throws ProductNotFoundException, CategoryException {
@@ -63,6 +97,11 @@ public class ProductImpl implements ProductServices {
         return productRepository.save(product);
     }
 
+    /**
+     * Deletes a product by its ID.
+     * @param id The product ID.
+     * @throws ProductNotFoundException If the product does not exist.
+     */
     @Override
     public void deleteProduct(String id) throws ProductNotFoundException {
         if (!productRepository.existsById(id)) {

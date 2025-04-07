@@ -14,6 +14,27 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Represents a product entity in the system.
+ *
+ * This class is mapped to the "product" table in the database and contains
+ * details about the product, including its SKU, name, description, price,
+ * quantity, category, and supplier.
+ *
+ * Fields:
+ * - id: Unique identifier for the product.
+ * - sku: Stock Keeping Unit, unique identifier for each product (non-nullable).
+ * - name: Name of the product (non-nullable).
+ * - description: Description of the product (optional, up to 1000 characters).
+ * - price: Price of the product (non-nullable).
+ * - quantity: Available quantity of the product (non-nullable).
+ * - category: The category to which the product belongs (non-nullable).
+ * - supplier: The supplier providing the product (optional).
+ *
+ * Relationships:
+ * - Many-to-one relationship with CategoryModel (each product belongs to one category).
+ * - Many-to-one relationship with SupplierModel (each product may have a supplier).
+ */
 @Entity
 @Getter
 @Setter
