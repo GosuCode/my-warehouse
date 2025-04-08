@@ -58,7 +58,7 @@ public class SupplierModel {
     @Column(nullable = false)
     private String address;
 
-    @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<ProductModel> suppliedProducts;
 }

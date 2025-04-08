@@ -6,6 +6,7 @@ import com.alember.my_warehouse.dto.product.ProductResponse;
 import com.alember.my_warehouse.enums.ApiStatus;
 import com.alember.my_warehouse.exception.CategoryException;
 import com.alember.my_warehouse.exception.ProductNotFoundException;
+import com.alember.my_warehouse.exception.SupplierException;
 import com.alember.my_warehouse.mapper.ProductMapper;
 import com.alember.my_warehouse.model.ProductModel;
 import com.alember.my_warehouse.services.ProductServices;
@@ -53,7 +54,7 @@ public class ProductController {
     productModel.setPrice(productRequest.getPrice());
     productModel.setQuantity(productRequest.getQuantity());
 
-    ProductModel savedProduct = productServices.addProduct(productModel, productRequest.getCategoryId());
+    ProductModel savedProduct = productServices.addProduct(productModel, productRequest.getCategoryId(), productRequest.getSupplierId());
 
     ProductResponse response = productMapper.toResponse(savedProduct);
 
@@ -126,7 +127,7 @@ public class ProductController {
       apiResponse.setStatus(ApiStatus.SUCCESS);
       apiResponse.setDescription("Product updated successfully!");
       apiResponse.setData(response);
-    } catch (ProductNotFoundException | CategoryException e) {
+    } catch (ProductNotFoundException | CategoryException | SupplierException e) {
       apiResponse.setStatus(ApiStatus.ERROR);
       apiResponse.setStatusCode(404);
       apiResponse.setDescription(e.getMessage());

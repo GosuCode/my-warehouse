@@ -1,5 +1,6 @@
 package com.alember.my_warehouse.dto.supplier;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,8 +16,10 @@ public class SupplierRequest {
     private String phone;
 
     @NotBlank
+    @Email
     private String email;
 
     @NotBlank
     private String address;
+
 }

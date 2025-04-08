@@ -16,7 +16,13 @@ public class ProductMapper {
         response.setPrice(model.getPrice());
         response.setQuantity(model.getQuantity());
 
-        response.setCategoryId(model.getCategory().getId().toString());
+        if (model.getCategory() != null) {
+            response.setCategoryId(model.getCategory().getId());
+        }
+
+        if (model.getSupplier() != null) {
+            response.setSupplierId(model.getSupplier().getId());
+        }
 
         return response;
     }

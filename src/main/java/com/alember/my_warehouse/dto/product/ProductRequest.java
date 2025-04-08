@@ -26,4 +26,6 @@ public class ProductRequest {
 
     @NotBlank
     private String categoryId;
+
+    private String supplierId;
 }
