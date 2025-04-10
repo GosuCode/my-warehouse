@@ -1,6 +1,6 @@
 package com.alember.my_warehouse.controller;
 
-import com.alember.my_warehouse.dto.CategoryRequest;
+import com.alember.my_warehouse.dto.category.CategoryRequest;
 import com.alember.my_warehouse.dto.category.CategoryResponse;
 import com.alember.my_warehouse.enums.ApiStatus;
 import com.alember.my_warehouse.exception.CategoryException;
