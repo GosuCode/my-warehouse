@@ -11,6 +11,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -29,5 +31,5 @@ public class UserModel {
     private String password;
 
     @Column(nullable = false)
-    private String role;
+    private List<String> role;
 }

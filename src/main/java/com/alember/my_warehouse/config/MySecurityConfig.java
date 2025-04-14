@@ -39,7 +39,6 @@ public class MySecurityConfig {
         return authenticationManagerBuilder.build();
     }
 
-
     @Bean
     UserDetailsService userDetailsService(){
 
