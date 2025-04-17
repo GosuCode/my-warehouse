@@ -8,12 +8,12 @@ import java.util.Optional;
 
 public interface UserServices {
 
-    public UserModel createUser(UserModel user);
+    UserModel createUser(UserModel user);
 
-    public Optional<UserModel> getUser(String id) throws UserNotFoundException;
+    Optional<UserModel> getUser(String id) throws UserNotFoundException;
 
-    public void deleteUser(String id);
+    void deleteUser(String id);
     
-    public List<UserModel> getAllUsers();
+    List<UserModel> getAllUsers();
 
 }

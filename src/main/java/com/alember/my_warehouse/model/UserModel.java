@@ -31,5 +31,8 @@ public class UserModel {
     private String password;
 
     @Column(nullable = false)
+    private String email;
+
+    @Column(nullable = false)
     private List<String> role;
 }

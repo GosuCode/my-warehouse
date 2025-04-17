@@ -4,11 +4,12 @@ import com.alember.my_warehouse.model.UserModel;
 import com.alember.my_warehouse.repository.UserRepository;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
+@Service
 public class WarehouseUserDetailsService implements UserDetailsService {
 
     @Autowired
@@ -21,6 +22,10 @@ public class WarehouseUserDetailsService implements UserDetailsService {
 
         UserModel user = userRepository.findByUsername(username);
 
+        if (user == null) {
+            throw new UsernameNotFoundException("User does not exist");
+        }
+
         if(!ObjectUtils.isEmpty(user)){
             warehouseUserDetails = new WarehouseUserDetails(user.getUsername(), user.getPassword(), user.getRole());
         }else{
@@ -28,4 +33,6 @@ public class WarehouseUserDetailsService implements UserDetailsService {
         }
         return warehouseUserDetails;
     }
+
+
 }

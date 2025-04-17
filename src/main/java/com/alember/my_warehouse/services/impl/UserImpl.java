@@ -21,7 +21,7 @@ public class UserImpl implements UserServices {
 
     @Override
     public UserModel createUser(UserModel user) {
-        user.setRole(List.of("READ", "WRITE"));
+        user.setRole(List.of("USER"));
         user.setPassword(encoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
