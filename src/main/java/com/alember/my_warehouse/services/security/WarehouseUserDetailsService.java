@@ -9,30 +9,31 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+/**
+ * Custom implementation of {@link UserDetailsService} for Spring Security.
+ * Loads user-specific data for authentication.
+ */
 @Service
 public class WarehouseUserDetailsService implements UserDetailsService {
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
+    /**
+     * Loads a user by username and converts it to {@link UserDetails} for Spring Security.
+     *
+     * @param username the username identifying the user
+     * @return {@link UserDetails} containing user credentials and authorities
+     * @throws UsernameNotFoundException if user is not found
+     */
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException{
-
-        WarehouseUserDetails warehouseUserDetails;
-
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserModel user = userRepository.findByUsername(username);
 
-        if (user == null) {
+        if (user == null || ObjectUtils.isEmpty(user)) {
             throw new UsernameNotFoundException("User does not exist");
         }
 
-        if(!ObjectUtils.isEmpty(user)){
-            warehouseUserDetails = new WarehouseUserDetails(user.getUsername(), user.getPassword(), user.getRole());
-        }else{
-            throw new UsernameNotFoundException("User does not exist");
-        }
-        return warehouseUserDetails;
+        return new WarehouseUserDetails(user.getUsername(), user.getPassword(), user.getRole());
     }
-
-
 }

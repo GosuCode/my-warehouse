@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 public class UserRequest {
@@ -17,4 +19,7 @@ public class UserRequest {
     @Email
     @NotBlank
     private String email;
+
+    @NotBlank
+    private List<String> role;
 }

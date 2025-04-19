@@ -17,8 +17,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
+/**
+ * REST controller for user-related operations such as registration, authentication,
+ * retrieval, and deletion of users.
+ */
 @RestController
 @RequestMapping("/api")
 public class UserController {
@@ -33,8 +36,14 @@ public class UserController {
     private UserMapper userMapper;
 
     @Autowired
-    WarehouseUserDetailsService warehouseUserDetailsService;
+    private WarehouseUserDetailsService warehouseUserDetailsService;
 
+    /**
+     * Registers a new user and returns a JWT token upon successful registration.
+     *
+     * @param userRequest the user request payload
+     * @return LoginResponse containing JWT token
+     */
     @PostMapping("/user/register/")
     public LoginResponse register(@RequestBody @Valid UserRequest userRequest) {
         ApiResponse apiResponse = new ApiResponse();
@@ -58,10 +67,15 @@ public class UserController {
         return loginResponse;
     }
 
+    /**
+     * Authenticates a user and returns a JWT token if credentials are valid.
+     *
+     * @param userRequest the login request payload
+     * @return LoginResponse containing JWT token
+     */
     @PostMapping("/login")
-    public LoginResponse authenticate(@RequestBody UserRequest userRequest){
+    public LoginResponse authenticate(@RequestBody UserRequest userRequest) {
         ApiResponse apiResponse = new ApiResponse();
-        UserModel user = userMapper.toModel(userRequest);
         userServices.authenticate(userRequest.getUsername(), userRequest.getPassword());
         UserDetails userDetails = warehouseUserDetailsService.loadUserByUsername(userRequest.getUsername());
 
@@ -71,6 +85,11 @@ public class UserController {
         return loginResponse;
     }
 
+    /**
+     * Retrieves all users in the system.
+     *
+     * @return ApiResponse containing list of all users
+     */
     @GetMapping("/users/")
     public ApiResponse getAllUsers() {
         ApiResponse apiResponse = new ApiResponse();
@@ -84,6 +103,12 @@ public class UserController {
         return apiResponse;
     }
 
+    /**
+     * Retrieves a user by their ID.
+     *
+     * @param id the user's ID
+     * @return ApiResponse containing user details or error if not found
+     */
     @GetMapping("/user/{id}")
     public ApiResponse getUserById(@PathVariable String id) {
         ApiResponse apiResponse = new ApiResponse();
@@ -103,7 +128,13 @@ public class UserController {
         return apiResponse;
     }
 
-    @DeleteMapping("/{id}")
+    /**
+     * Deletes a user by their ID.
+     *
+     * @param id the user's ID
+     * @return ApiResponse indicating success or failure of the operation
+     */
+    @DeleteMapping("/user/{id}")
     public ApiResponse deleteUser(@PathVariable String id) {
         ApiResponse apiResponse = new ApiResponse();
         try {
@@ -118,5 +149,4 @@ public class UserController {
         }
         return apiResponse;
     }
-
 }
