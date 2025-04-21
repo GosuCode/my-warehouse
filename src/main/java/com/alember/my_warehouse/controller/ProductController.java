@@ -19,7 +19,6 @@ import java.util.Optional;
 
 /**
  * ProductController handles CRUD operations for products.
- *
  * Endpoints:
  * - POST /api/product/ - Create a new product.
  * - GET /api/product/ - Retrieve all products.
@@ -29,6 +28,7 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api/product")
+@SuppressWarnings("unused")
 public class ProductController {
 
   @Autowired

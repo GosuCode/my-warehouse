@@ -19,6 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/suppliers")
+@SuppressWarnings("unused")
 public class SupplierController {
 
   @Autowired

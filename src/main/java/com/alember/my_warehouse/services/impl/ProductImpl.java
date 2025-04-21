@@ -37,7 +37,7 @@ public class ProductImpl implements ProductServices {
     CategoryRepository categoryRepository;
 
     @Autowired
-    private SupplierRepository supplierRepository;
+    SupplierRepository supplierRepository;
 
     /**
      * Adds a new product and associates it with a category.

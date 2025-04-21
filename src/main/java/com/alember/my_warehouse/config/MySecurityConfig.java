@@ -50,13 +50,14 @@ public class MySecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/product/").hasRole("USER")
-                        .requestMatchers("/api/suppliers").hasRole("ADMIN")
-                        .requestMatchers("/api/users/").hasRole("ADMIN")
-                        .requestMatchers("/api/user/**").hasRole("ADMIN")
-                        .requestMatchers("/api/category/**").authenticated()
-                        .requestMatchers("/api/user/register/").permitAll()
+                        .requestMatchers("/api/user/register/**").permitAll()
                         .requestMatchers("/api/login").permitAll()
+                        .requestMatchers("/api/product/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/api/suppliers").hasRole("ADMIN")
+                        .requestMatchers("/api/suppliers/**").hasRole("ADMIN")
+                        .requestMatchers("/api/users/").hasAnyRole( "USER","ADMIN")
+                        .requestMatchers("/api/user/**").hasRole("ADMIN")
+                        .requestMatchers("/api/category/**").hasRole("ADMIN")
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
@@ -84,6 +85,7 @@ public class MySecurityConfig {
 
     /**
      * Defines the AuthenticationManager using the custom UserDetailsService.
+     * Delegates authentication to providers
      *
      * @param httpSecurity the HttpSecurity context
      * @param userDetailsService the custom user details service
@@ -112,6 +114,7 @@ public class MySecurityConfig {
     /**
      * Configures the AuthenticationProvider to use DAO-based authentication with
      * the custom user details service and BCrypt password encoder.
+     * Validates user credentials (e.g., via DB)
      *
      * @return the configured AuthenticationProvider
      */

@@ -29,6 +29,7 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api/category")
+@SuppressWarnings("unused")
 public class CategoryController {
 
   @Autowired
@@ -53,12 +54,10 @@ public class CategoryController {
 
     CategoryModel savedCategory = categoryServices.addCategory(categoryModel);
 
-    CategoryResponse response = categoryMapper.toResponse(savedCategory);
-
       apiResponse.setStatusCode(200);
       apiResponse.setStatus(ApiStatus.SUCCESS);
       apiResponse.setDescription("Category Added Successfully");
-      apiResponse.setData(response);
+      apiResponse.setData(savedCategory);
       return apiResponse;
   }
 
@@ -89,14 +88,17 @@ public class CategoryController {
    * @return ApiResponse with the status and updated category.
    */
   @PutMapping("/{id}")
-  public ApiResponse updateCategory(@PathVariable("id") String id, @RequestBody CategoryModel updatedCategory) {
+  public ApiResponse updateCategory(@PathVariable("id") String id, @RequestBody CategoryRequest updatedCategory) {
     ApiResponse apiResponse = new ApiResponse();
     try {
-      categoryServices.updateCategory(id, updatedCategory);
+      CategoryModel model = categoryMapper.toModel(updatedCategory);
+      CategoryModel updated = categoryServices.updateCategory(id, model);
+      CategoryResponse response = categoryMapper.toResponse(updated);
+
       apiResponse.setStatusCode(200);
       apiResponse.setStatus(ApiStatus.SUCCESS);
       apiResponse.setDescription("Category updated successfully!");
-      apiResponse.setData(updatedCategory);
+      apiResponse.setData(response);
     } catch (CategoryException e) {
       apiResponse.setStatusCode(500);
       apiResponse.setStatus(ApiStatus.ERROR);
@@ -124,7 +126,7 @@ public class CategoryController {
 
       apiResponse.setStatusCode(200);
       apiResponse.setStatus(ApiStatus.SUCCESS);
-      apiResponse.setDescription("Category updated successfully!");
+      apiResponse.setDescription("Category fetched successfully!");
       apiResponse.setData(response);
     } catch (CategoryException e) {
       apiResponse.setStatusCode(500);

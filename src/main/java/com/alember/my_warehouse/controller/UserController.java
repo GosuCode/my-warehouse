@@ -24,19 +24,20 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api")
+@SuppressWarnings("unused")
 public class UserController {
 
     @Autowired
-    private UserImpl userServices;
+    UserImpl userServices;
 
     @Autowired
-    private JwtService jwtService;
+    JwtService jwtService;
 
     @Autowired
-    private UserMapper userMapper;
+    UserMapper userMapper;
 
     @Autowired
-    private WarehouseUserDetailsService warehouseUserDetailsService;
+    WarehouseUserDetailsService warehouseUserDetailsService;
 
     /**
      * Registers a new user and returns a JWT token upon successful registration.
@@ -44,7 +45,7 @@ public class UserController {
      * @param userRequest the user request payload
      * @return LoginResponse containing JWT token
      */
-    @PostMapping("/user/register/")
+    @PostMapping("/user/register")
     public LoginResponse register(@RequestBody @Valid UserRequest userRequest) {
         ApiResponse apiResponse = new ApiResponse();
         UserModel user = userMapper.toModel(userRequest);
@@ -75,7 +76,6 @@ public class UserController {
      */
     @PostMapping("/login")
     public LoginResponse authenticate(@RequestBody UserRequest userRequest) {
-        ApiResponse apiResponse = new ApiResponse();
         userServices.authenticate(userRequest.getUsername(), userRequest.getPassword());
         UserDetails userDetails = warehouseUserDetailsService.loadUserByUsername(userRequest.getUsername());
 
