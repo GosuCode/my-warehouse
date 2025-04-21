@@ -15,8 +15,6 @@ A Spring Boot application for managing inventory and stock levels.
 - **MySQL**: Database for storing data.
 - **Maven**: Build tool.
 
-## Getting Started
-
 ### Prerequisites
 
 - Java 21 or higher.
@@ -24,8 +22,7 @@ A Spring Boot application for managing inventory and stock levels.
 - Git (for version control).
 
 ---
-
-### How to Use
+## Getting Started
 
 1. **Clone the Repository**
    ```bash
@@ -103,5 +100,3 @@ Yes, Al — that structure works well, but showing both options in the README mi
 ### Need Help?
 
 > If you encounter any issues, feel free to [create an issue](https://github.com/GosuCode/my-warehouse/issues) or [reach out to me](https://www.linkedin.com/in/alembershreesh/).
-
----
